@@ -5,14 +5,14 @@ const client = new Discord.Client();
 client.on('ready', () => {
     console.log('connected as ' + client.user.tag);
 
-    client.user.setActivity("Netflix", {type:"WATCHING"});
+    client.user.setActivity("TMKC", {type:"AISHIK"});
 
     client.guilds.cache.forEach((guild) => {
         console.log(guild.name);
         guild.channels.cache.forEach((channel) => {
             console.log(` - ${channel.name} ${channel.type} ${channel.id} `);
         });
-        // General channel id: 752790746607648812
+        
 
     });
 
