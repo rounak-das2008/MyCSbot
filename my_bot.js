@@ -5,7 +5,7 @@ const client = new Discord.Client();
 client.on('ready', () => {
     console.log('connected as ' + client.user.tag);
 
-    client.user.setActivity("TMKC", {type:"AISHIK"});
+    client.user.setActivity("with AISHIK's maa", {type:"PLAYING"});
 
     client.guilds.cache.forEach((guild) => {
         console.log(guild.name);
