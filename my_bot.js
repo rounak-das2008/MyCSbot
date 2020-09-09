@@ -12,7 +12,6 @@ client.on('ready', () => {
         guild.channels.cache.forEach((channel) => {
             console.log(` - ${channel.name} ${channel.type} ${channel.id} `);
         });
-        
 
     });
 
@@ -29,6 +28,8 @@ client.on('message',(receivedMessage) => {
     }
     receivedMessage.channel.send('Message received: ' + receivedMessage.author.toString() +':' + receivedMessage.content);
     receivedMessage.react("🤖")
+
+    // console.log(receivedMessage);
 
     if (receivedMessage.content.startsWith("!")) {
         processCommand(receivedMessage);
@@ -47,8 +48,17 @@ function processCommand(receivedMessage) {
     else if (primaryCommand == "multiply") {
         multiplyCommand(arguments, receivedMessage);
     }
+    else if (primaryCommand =='add') {
+        addCommand(arguments, receivedMessage);
+    }
+    else if (primaryCommand == 'subtract') {
+        subtractCommand(arguments, receivedMessage);
+    }
+    else if (primaryCommand =='divide') {
+        divideCommand(arguments, receivedMessage);
+    }
     else {
-        receivedMessage.channel.send('Unknown command. Try !help [topic] or !multiply')
+        receivedMessage.channel.send('Unknown command. Try !help [topic] or !multiply, !add, !subtract, !divide')
     }
 }
 
@@ -64,6 +74,48 @@ function multiplyCommand(arguments, receivedMessage) {
     receivedMessage.channel.send("The product of arguments " + arguments +" is " + product.toString());
 }
 
+function addCommand(arguments, receivedMessage) {
+    if (arguments.length <2) {
+        receivedMessage.channel.send('Not enough arguments. Try !add 5 20');
+        return;
+    }
+    let add = 0;
+    arguments.forEach((value) => {
+        add = add + parseFloat(value);
+    })
+    receivedMessage.channel.send("The addition of arguments "+ arguments + " is " + add.toString());
+}
+
+
+function subtractCommand(arguments, receivedMessage) {
+    if (arguments.length <2) {
+        receivedMessage.channel.send("Not enough arguments. Try !subtract 8 3");
+        return;
+    }
+    // console.log(arguments)
+    let subtract1 = parseFloat(arguments[0]);
+    let subtract2 = parseFloat(arguments[1]);
+    subtract = subtract1 - subtract2;
+    receivedMessage.channel.send("The subtraction of arguments "+arguments+ " is "+ subtract.toString());
+
+}
+
+function divideCommand(arguments, receivedMessage) {
+    if (arguments.length <2) {
+        receivedMessage.channel.send("Not enough of arguments. Try !divide 10 5");
+        return;
+    }
+
+    let divide1 = parseFloat(arguments[0]);
+    let divide2 = parseFloat(arguments[1]);
+    if (divide2 != 0) {
+        divide = divide1/ divide2;
+        receivedMessage.channel.send("The division of arguments "+ arguments + " is " + divide.toString());
+    } 
+    else {
+        receivedMessage.channel.send('This is not valid man... Zero division Error !!')
+    }
+}
 
 function helpCommand(arguments, receivedMessage) {
     if (arguments.length == 0) {
