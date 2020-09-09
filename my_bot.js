@@ -5,7 +5,7 @@ const client = new Discord.Client();
 client.on('ready', () => {
     console.log('connected as ' + client.user.tag);
 
-    client.user.setActivity("with AISHIK's maa", {type:"PLAYING"});
+    client.user.setActivity("Aishik's Maa fucked by Sounaq xxx", {type:"WATCHING"});
 
     client.guilds.cache.forEach((guild) => {
         console.log(guild.name);
@@ -57,8 +57,11 @@ function processCommand(receivedMessage) {
     else if (primaryCommand =='divide') {
         divideCommand(arguments, receivedMessage);
     }
+    else if (primaryCommand =='factorial') {
+        factorialCommand(arguments, receivedMessage);
+    }
     else {
-        receivedMessage.channel.send('Unknown command. Try !help [topic] or !multiply, !add, !subtract, !divide')
+        receivedMessage.channel.send('Unknown command. Try !help [topic] or !multiply')
     }
 }
 
@@ -115,6 +118,21 @@ function divideCommand(arguments, receivedMessage) {
     else {
         receivedMessage.channel.send('This is not valid man... Zero division Error !!')
     }
+}
+
+function factorialCommand(arguments, receivedMessage) {
+    if (arguments.length <1) {
+        receivedMessage.channel.send("Not enough of arguments. Try !factorial 5..");
+        return;
+    } 
+    let fact = 1
+    arguments.forEach((value) => {
+        while (value >0) {
+            fact = fact* value;
+            value = value-1;
+        }
+    })
+    receivedMessage.channel.send("The facorial of arguments "+arguments+ " is " + fact.toString());
 }
 
 function helpCommand(arguments, receivedMessage) {
