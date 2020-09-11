@@ -5,7 +5,7 @@ const client = new Discord.Client();
 client.on('ready', () => {
     console.log('connected as ' + client.user.tag);
 
-    client.user.setActivity("Aishik's Maa fucked by Sounaq xxx", {type:"WATCHING"});
+    client.user.setActivity("MC's Maa fucked by Sounaq", {type:"WATCHING"});
 
     client.guilds.cache.forEach((guild) => {
         console.log(guild.name);
@@ -17,9 +17,9 @@ client.on('ready', () => {
 
     let generalChannel = client.channels.cache.get("752790746607648812");
     // const attachment = new Discord.Attachment("https://www.devdungeon.com/sites/all/themes/devdungeon2/logo.png", 'killerimage.png');
-    generalChannel.send(
-        {files: ['https://www.devdungeon.com/sites/all/themes/devdungeon2/logo.png']
-        })
+    // generalChannel.send(
+    //     {files: ['https://www.devdungeon.com/sites/all/themes/devdungeon2/logo.png']
+    //     })
 });
 
 client.on('message',(receivedMessage) => {
@@ -39,20 +39,38 @@ client.on('message',(receivedMessage) => {
 function processCommand(receivedMessage) {
     let fullCommand = receivedMessage.content.substr(1);
     let splitCommand = fullCommand.split(" ");
-    let primaryCommand = splitCommand[0];
+    let primaryCommand = splitCommand[0].toLowerCase();
     let arguments = splitCommand.slice(1);
 
     if (primaryCommand == 'help')   {
         helpCommand(arguments, receivedMessage);
     }
     else if (primaryCommand == "multiply") {
-        multiplyCommand(arguments, receivedMessage);
+        result = multiplyCommand(arguments, receivedMessage)
+        if (isNaN(result)) {
+            invalidEntries(receivedMessage);
+        }
+        else {
+            receivedMessage.channel.send("The product of arguments " + arguments +" is " + result.toString());
+        }
     }
     else if (primaryCommand =='add') {
-        addCommand(arguments, receivedMessage);
+        result = addCommand(arguments, receivedMessage);
+        if (isNaN(result)) {
+            invalidEntries(receivedMessage);
+        }
+        else {
+            receivedMessage.channel.send("The addition of arguments "+ arguments + " is " + result.toString());
+        }
     }
     else if (primaryCommand == 'subtract') {
-        subtractCommand(arguments, receivedMessage);
+        result = subtractCommand(arguments, receivedMessage);
+        if (isNaN(result)) {
+            invalidEntries(receivedMessage);
+        }
+        else {
+            receivedMessage.channel.send("The subtraction of arguments " + arguments +" is " + result.toString());
+        }
     }
     else if (primaryCommand =='divide') {
         divideCommand(arguments, receivedMessage);
@@ -60,9 +78,22 @@ function processCommand(receivedMessage) {
     else if (primaryCommand =='factorial') {
         factorialCommand(arguments, receivedMessage);
     }
-    else {
-        receivedMessage.channel.send('Unknown command. Try !help [topic] or !multiply')
+    else if (primaryCommand =='info') {
+        infoCommand(arguments, receivedMessage);
     }
+    else if (primaryCommand =='commands') {
+        commandsCommand(receivedMessage);
+    }
+    else if (primaryCommand =='ping') {
+        pingCommand(receivedMessage);
+    }
+    else {
+        receivedMessage.channel.send('Unknown command. Try !help, !ping, !info or !commands to see a list of commands available');
+    }
+}
+
+function invalidEntries(receivedMessage) {
+    receivedMessage.channel.send('Invalid entries. Result not defined ...');
 }
 
 function multiplyCommand(arguments, receivedMessage) {
@@ -74,7 +105,7 @@ function multiplyCommand(arguments, receivedMessage) {
     arguments.forEach((value) => {
         product = product* parseFloat(value); 
     })
-    receivedMessage.channel.send("The product of arguments " + arguments +" is " + product.toString());
+    return product;
 }
 
 function addCommand(arguments, receivedMessage) {
@@ -86,7 +117,7 @@ function addCommand(arguments, receivedMessage) {
     arguments.forEach((value) => {
         add = add + parseFloat(value);
     })
-    receivedMessage.channel.send("The addition of arguments "+ arguments + " is " + add.toString());
+    return add;
 }
 
 
@@ -99,8 +130,7 @@ function subtractCommand(arguments, receivedMessage) {
     let subtract1 = parseFloat(arguments[0]);
     let subtract2 = parseFloat(arguments[1]);
     subtract = subtract1 - subtract2;
-    receivedMessage.channel.send("The subtraction of arguments "+arguments+ " is "+ subtract.toString());
-
+    return subtract;
 }
 
 function divideCommand(arguments, receivedMessage) {
@@ -125,14 +155,64 @@ function factorialCommand(arguments, receivedMessage) {
         receivedMessage.channel.send("Not enough of arguments. Try !factorial 5..");
         return;
     } 
+    let flag =0;
     let fact = 1
     arguments.forEach((value) => {
-        while (value >0) {
-            fact = fact* value;
-            value = value-1;
+        cons = parseFloat(value);
+
+        if (Math.sign(cons) == -1) {
+            receivedMessage.channel.send('Negative Numbers are not valid ...');
+            flag = 0;
+            return;
         }
+
+        else {
+
+        var result = (cons - Math.floor(cons)) !== 0; 
+   
+        if (result) {
+            receivedMessage.channel.send("It must be a whole number...");
+            flag = 0;
+            return;
+            }
+                
+        else {
+            while (cons>0) {
+                fact = fact*cons
+                cons = cons-1
+                } 
+            flag =1;
+            }
+      }      
     })
+    if (flag==1) {
     receivedMessage.channel.send("The facorial of arguments "+arguments+ " is " + fact.toString());
+    }
+}
+        
+function infoCommand(arguments, receivedMessage) {
+    if (arguments.length ==0) {
+        receivedMessage.channel.send('This is CSBot_bot , from CS Contents Group. We are XII C.');
+        return;
+    }
+    value = arguments[0];
+    name = value.toLowerCase();
+    if (name.search('rounak') !=-1) {
+        receivedMessage.channel.send("Oh ho ho ... Rounak .... He is my boss ....!!!. ");
+        return;
+    }
+    else {
+        receivedMessage.channel.send("Sorry I don't know this guy ...");
+    }
+}    
+
+function commandsCommand(receivedMessage) {
+    receivedMessage.channel.send('Commands which I know ...');
+    receivedMessage.channel.send('!help, !add, !subtract, !divide, !multiply, !facorial, !info, !ping, !commands');
+}
+
+function pingCommand(receivedMessage) {
+    receivedMessage.channel.send('Pong!');
 }
 
 function helpCommand(arguments, receivedMessage) {
