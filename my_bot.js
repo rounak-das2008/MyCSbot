@@ -5,7 +5,7 @@ const client = new Discord.Client();
 client.on('ready', () => {
     console.log('connected as ' + client.user.tag);
 
-    client.user.setActivity("MC's Maa fucked by Sounaq", {type:"WATCHING"});
+    client.user.setActivity("PUBG", {type:"PLAYING"});
 
     client.guilds.cache.forEach((guild) => {
         console.log(guild.name);
