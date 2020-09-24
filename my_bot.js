@@ -87,6 +87,9 @@ function processCommand(receivedMessage) {
     else if (primaryCommand =='ping') {
         pingCommand(receivedMessage);
     }
+    else if (primaryCommand == 'dhankur') {
+        receivedMessage.channel.send('Oh that bokachoda  ...  . Come on ')
+    }
     else {
         receivedMessage.channel.send('Unknown command. Try !help, !ping, !info or !commands to see a list of commands available');
     }
